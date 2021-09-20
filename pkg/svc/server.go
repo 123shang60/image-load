@@ -1,7 +1,80 @@
 package svc
 
-import "github.com/gin-gonic/gin"
+import (
+	"encoding/json"
+	"github.com/123shang60/image-load/pkg/common"
+	"github.com/123shang60/image-load/pkg/register"
+	"github.com/123shang60/image-load/pkg/s3"
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"sync"
+)
 
 func ServerLoad(c *gin.Context) {
+	var s3File s3.S3File
+	if err := c.ShouldBind(&s3File); err != nil {
+		logrus.Error("请求无法解析！", err)
+		c.JSON(200, []LoadResult{{
+			Name: "server",
+			Code: 500,
+			Data: err.Error(),
+		}})
+		return
+	}
 
+	byte, err := json.Marshal(s3File)
+	if err != nil {
+		logrus.Error("请求无法解析！", err)
+		c.JSON(200, []LoadResult{{
+			Name: "server",
+			Code: 500,
+			Data: err.Error(),
+		}})
+		return
+	}
+
+	agentList := register.GetCache()
+	result := make([]LoadResult, 0)
+	wg := sync.WaitGroup{}
+	lock := sync.Mutex{}
+
+	wg.Add(len(agentList))
+	for _, value := range agentList {
+		go func() {
+			defer wg.Done()
+			node := value.Object.(register.NodeInfo)
+			res, err := common.DoJsonHttp("http://"+node.Addr+":"+node.Port+"/load", byte, "POST")
+			if err != nil {
+				logrus.Error("agent 执行镜像导入失败！", "node 名称：", node.Name, "失败原因：", err)
+				lock.Lock()
+				defer lock.Unlock()
+				result = append(result, LoadResult{
+					Name: node.Name,
+					Code: 500,
+					Data: err.Error(),
+				})
+				return
+			}
+			logrus.Info("agent 执行镜像导入结果！", "node 名称：", node.Name, "执行结果：", string(res))
+			var rul LoadResult
+			err = json.Unmarshal(res, &rul)
+			if err != nil {
+				logrus.Error("agent 执行镜像导入结果无法解析！", "node 名称：", node.Name, "失败原因：", err)
+				lock.Lock()
+				defer lock.Unlock()
+				result = append(result, LoadResult{
+					Name: node.Name,
+					Code: 501,
+					Data: err.Error(),
+				})
+				return
+			}
+			lock.Lock()
+			defer lock.Unlock()
+			result = append(result, rul)
+		}()
+	}
+	wg.Wait()
+
+	c.JSON(200, result)
 }
