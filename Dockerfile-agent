@@ -1,0 +1,28 @@
+FROM golang:1.17.1 as builder
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64 \
+	GOPROXY="https://goproxy.cn,direct"
+WORKDIR /usr/app/
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY pkg pkg
+COPY cmd cmd
+
+RUN go build -o agent ./cmd/agent.go
+
+FROM  alpine:latest
+
+ENV TIME_ZONE  Asia/Shanghai
+ENV registAddr 0.0.0.0:8080
+ENV addr 127.0.0.1
+ENV port 8081
+ENV name agent-local
+
+WORKDIR  /usr/app/
+COPY  --from=builder /usr/app/agent  .
+CMD  ["/usr/app/agent"]
+
