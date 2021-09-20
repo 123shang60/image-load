@@ -3,11 +3,11 @@ package dockerCore
 import (
 	"context"
 	"encoding/json"
-	"github.com/123shang60/image-load/pkg/common"
 	"os"
 
+	"github.com/123shang60/image-load/pkg/common"
+
 	"github.com/docker/docker/client"
-	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -34,7 +34,7 @@ func LoadImage(image string) error {
 
 	resp, err := cli.ImageLoad(ctx, file, false)
 	if err != nil {
-		logrus.Error("镜像加载失败！", err)
+		common.Logger().Error("镜像加载失败！", err)
 		return err
 	}
 	byte, _ := json.Marshal(resp)
