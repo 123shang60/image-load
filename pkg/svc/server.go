@@ -8,6 +8,7 @@ import (
 	"github.com/123shang60/image-load/pkg/register"
 	"github.com/123shang60/image-load/pkg/s3"
 	"github.com/gin-gonic/gin"
+	"github.com/patrickmn/go-cache"
 	"github.com/sirupsen/logrus"
 )
 
@@ -41,9 +42,10 @@ func ServerLoad(c *gin.Context) {
 
 	wg.Add(len(agentList))
 	for _, value := range agentList {
-		go func() {
+		go func(value cache.Item) {
 			defer wg.Done()
 			node := value.Object.(register.NodeInfo)
+			logrus.Debug("开始执行对应节点的导入工作:", node)
 			res, err := common.DoJsonHttp("http://"+node.Addr+":"+node.Port+"/load", byte, "POST")
 			if err != nil {
 				logrus.Error("agent 执行镜像导入失败！", "node 名称：", node.Name, "失败原因：", err)
@@ -73,7 +75,7 @@ func ServerLoad(c *gin.Context) {
 			lock.Lock()
 			defer lock.Unlock()
 			result = append(result, rul)
-		}()
+		}(value)
 	}
 	wg.Wait()
 
