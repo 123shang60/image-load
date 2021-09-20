@@ -21,6 +21,8 @@ ENV registAddr 0.0.0.0:8080
 ENV addr 127.0.0.1
 ENV port 8081
 ENV name agent-local
+ENV GIN_MODE release
+ENV LOG_LEVEL debug
 
 WORKDIR  /usr/app/
 COPY  --from=builder /usr/app/agent  .

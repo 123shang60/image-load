@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/123shang60/image-load/pkg/common"
 	"os"
 
 	"github.com/123shang60/image-load/pkg/dockerCore"
 	"github.com/123shang60/image-load/pkg/register"
 	"github.com/123shang60/image-load/pkg/router"
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -25,6 +25,6 @@ func main() {
 	r := router.NewAgentRouter()
 	err := r.Run(addr + ":" + port)
 	if err != nil {
-		logrus.Panic(err)
+		common.Logger().Panic(err)
 	}
 }

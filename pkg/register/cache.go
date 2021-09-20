@@ -1,10 +1,10 @@
 package register
 
 import (
+	"github.com/123shang60/image-load/pkg/common"
 	"time"
 
 	"github.com/patrickmn/go-cache"
-	"github.com/sirupsen/logrus"
 )
 
 // 注册信息
@@ -15,11 +15,11 @@ func init() {
 }
 
 func AddCache(info NodeInfo) error {
-	logrus.Debug("有一个 agent 前来注册。。。。", info)
+	common.Logger().Debug("有一个 agent 前来注册。。。。", info)
 
 	c.SetDefault(info.Name, info)
 
-	logrus.Debug("服务注册成功！", info)
+	common.Logger().Debug("服务注册成功！", info)
 	return nil
 }
 

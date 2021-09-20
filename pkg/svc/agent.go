@@ -1,12 +1,12 @@
 package svc
 
 import (
+	"github.com/123shang60/image-load/pkg/common"
 	"os"
 
 	"github.com/123shang60/image-load/pkg/dockerCore"
 	"github.com/123shang60/image-load/pkg/s3"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func AgentLoad(c *gin.Context) {
@@ -16,7 +16,7 @@ func AgentLoad(c *gin.Context) {
 		name = "agent-local"
 	}
 	if err := c.ShouldBind(&s3File); err != nil {
-		logrus.Error("请求无法解析！", err)
+		common.Logger().Error("请求无法解析！", err)
 		c.JSON(200, LoadResult{
 			Name: name,
 			Code: 500,
@@ -27,7 +27,7 @@ func AgentLoad(c *gin.Context) {
 
 	file, err := s3.Download(s3File)
 	if err != nil {
-		logrus.Error("文件获取失败！", err)
+		common.Logger().Error("文件获取失败！", err)
 		c.JSON(200, LoadResult{
 			Name: name,
 			Code: 501,
@@ -37,7 +37,7 @@ func AgentLoad(c *gin.Context) {
 	}
 
 	if err = dockerCore.LoadImage(file); err != nil {
-		logrus.Error("镜像导入！", err)
+		common.Logger().Error("镜像导入！", err)
 		c.JSON(200, LoadResult{
 			Name: name,
 			Code: 502,
