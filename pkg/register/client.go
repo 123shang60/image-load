@@ -21,19 +21,19 @@ func RegistAgent() {
 
 func registAgent() {
 	registAddr := os.Getenv("registAddr")
-	if registAddr== "" {
+	if registAddr == "" {
 		registAddr = "http://127.0.0.1:8080"
 	}
 	addr := os.Getenv("addr")
-	if addr== "" {
+	if addr == "" {
 		addr = "127.0.0.1"
 	}
 	port := os.Getenv("port")
-	if port== "" {
+	if port == "" {
 		port = "8081"
 	}
 	name := os.Getenv("name")
-	if name== "" {
+	if name == "" {
 		name = "agent-local"
 	}
 
@@ -43,23 +43,23 @@ func registAgent() {
 		Port: port,
 	}
 
-	byte,err := json.Marshal(nodeInof)
+	byte, err := json.Marshal(nodeInof)
 	if err != nil {
 		logrus.Error("构造环境信息失败！")
 		return
 	}
 
-	res,err := common.DoJsonHttp(registAddr + "/regist",byte,"POST")
+	res, err := common.DoJsonHttp(registAddr+"/regist", byte, "POST")
 	if err != nil {
-		logrus.Error("发送注册信息失败！",err)
+		logrus.Error("发送注册信息失败！", err)
 		return
 	}
 
-	logrus.Info("接收到注册信息:",string(res))
+	logrus.Info("接收到注册信息:", string(res))
 
 	var rul RegistResult
-	if err := json.Unmarshal(res,&rul);err != nil {
-		logrus.Error("解析注册结果失败！",err)
+	if err := json.Unmarshal(res, &rul); err != nil {
+		logrus.Error("解析注册结果失败！", err)
 	}
 	if rul.Code == 200 {
 		logrus.Debug("注册成功！")

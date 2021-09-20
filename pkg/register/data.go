@@ -7,6 +7,6 @@ type NodeInfo struct {
 }
 
 type RegistResult struct {
-	Code int32 `json:"code"`
+	Code int32  `json:"code"`
 	Data string `json:"data"`
 }

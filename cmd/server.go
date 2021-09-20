@@ -8,13 +8,13 @@ import (
 
 func main() {
 	serverAddr := os.Getenv("serverAddr")
-	if serverAddr== "" {
+	if serverAddr == "" {
 		serverAddr = "0.0.0.0:8080"
 	}
 
 	r := router.NewServerRouter()
 	err := r.Run(serverAddr)
 	if err != nil {
-		logrus.Panic("server 启动失败！",err)
+		logrus.Panic("server 启动失败！", err)
 	}
 }
