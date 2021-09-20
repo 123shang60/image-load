@@ -71,3 +71,8 @@ curl --location --request GET '127.0.0.1:8080/nodelist'
 ## 已知问题
 
 1. 要求全部 k8s 节点的 docker api 版本必须完全一致，否则 agent 无法工作
+
+## 改进方向
+
+1. 服务内部通信应该基于 websocket 等长连接进行
+2. 代码优化，部分重复代码重构
