@@ -11,11 +11,11 @@ func main() {
 	// 定时注册启动
 	go register.RegistAgent()
 	addr := os.Getenv("addr")
-	if addr== "" {
+	if addr == "" {
 		addr = "127.0.0.1"
 	}
 	port := os.Getenv("port")
-	if port== "" {
+	if port == "" {
 		port = "8081"
 	}
 	r := router.NewAgentRouter()
