@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-load-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: image-load-server
+  template:
+    metadata:
+      labels:
+        app: image-load-server
+    spec:
+      containers:
+        - env:
+            - name: serverAddr
+              value: "0.0.0.0:8080"
+          image: server:0.0.1
+          name: image-load-server
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "30m"
+              memory: 500Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: host-time
+      volumes:
+        - hostPath:
+            path: /etc/localtime
+            type: ""
+          name: host-time
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-load-server-svc
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: image-load-server
+  sessionAffinity: None
+  type: NodePort

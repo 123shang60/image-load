@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: image-load-agent
+spec:
+  selector:
+    matchLabels:
+      app: image-load-agent
+  template:
+    metadata:
+      labels:
+        app: image-load-agent
+    spec:
+      containers:
+        - env:
+            - name: addr
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: name
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: registAddr
+              value: 'http://image-load-server-svc:8080'
+            - name: port
+              value: '8080'
+            - name: DOCKER_API_VERSION
+              value: '1.40'
+          image: agent:0.0.1
+          name: image-load-agent
+          resources:
+            limits:
+              cpu: "30m"
+              memory: 50Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          volumeMounts:
+          - mountPath: /var/run/docker.sock
+            name: docker-sock
+          - mountPath: /etc/localtime
+            name: host-time
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+        - hostPath:
+            path: /var/run/docker.sock
+            type: ""
+          name: docker-sock
+        - hostPath:
+            path: /etc/localtime
+            type: ""
+          name: host-time
