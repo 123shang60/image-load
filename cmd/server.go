@@ -1,9 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"github.com/123shang60/image-load/pkg/router"
 	"github.com/sirupsen/logrus"
-	"os"
 )
 
 func main() {

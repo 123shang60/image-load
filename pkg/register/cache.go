@@ -1,9 +1,10 @@
 package register
 
 import (
+	"time"
+
 	"github.com/patrickmn/go-cache"
 	"github.com/sirupsen/logrus"
-	"time"
 )
 
 // 注册信息

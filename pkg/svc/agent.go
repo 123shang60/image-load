@@ -1,11 +1,12 @@
 package svc
 
 import (
+	"os"
+
 	"github.com/123shang60/image-load/pkg/dockerCore"
 	"github.com/123shang60/image-load/pkg/s3"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"os"
 )
 
 func AgentLoad(c *gin.Context) {

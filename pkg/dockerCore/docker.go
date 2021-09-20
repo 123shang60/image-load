@@ -3,9 +3,10 @@ package dockerCore
 import (
 	"context"
 	"encoding/json"
+	"os"
+
 	"github.com/docker/docker/client"
 	"github.com/sirupsen/logrus"
-	"os"
 )
 
 var (

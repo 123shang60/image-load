@@ -2,10 +2,11 @@ package register
 
 import (
 	"encoding/json"
-	"github.com/123shang60/image-load/pkg/common"
-	"github.com/sirupsen/logrus"
 	"os"
 	"time"
+
+	"github.com/123shang60/image-load/pkg/common"
+	"github.com/sirupsen/logrus"
 )
 
 func RegistAgent() {
