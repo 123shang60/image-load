@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/123shang60/image-load/pkg/common"
 	"os"
 
 	"github.com/123shang60/image-load/pkg/router"
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -16,6 +16,6 @@ func main() {
 	r := router.NewServerRouter()
 	err := r.Run(serverAddr)
 	if err != nil {
-		logrus.Panic("server 启动失败！", err)
+		common.Logger().Panic("server 启动失败！", err)
 	}
 }
