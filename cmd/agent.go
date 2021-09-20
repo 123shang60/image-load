@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/123shang60/image-load/pkg/dockerCore"
 	"github.com/123shang60/image-load/pkg/register"
 	"github.com/123shang60/image-load/pkg/router"
 	"github.com/sirupsen/logrus"
@@ -8,6 +9,8 @@ import (
 )
 
 func main() {
+	// 初始化 docker cli
+	dockerCore.Init()
 	// 定时注册启动
 	go register.RegistAgent()
 	addr := os.Getenv("addr")
