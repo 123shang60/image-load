@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/123shang60/image-load/pkg/common"
 	"os"
 
+	"github.com/123shang60/image-load/pkg/common"
 	"github.com/123shang60/image-load/pkg/router"
 )
 

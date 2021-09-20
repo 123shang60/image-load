@@ -15,7 +15,6 @@ func init() {
 		level = "error"
 	}
 
-	logger.Formatter = &logrus.JSONFormatter{}
 	lvl, err := logrus.ParseLevel(level)
 	if err != nil {
 		logrus.Panic("日志等级不合法！", err)
