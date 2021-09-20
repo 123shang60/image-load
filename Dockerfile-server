@@ -18,6 +18,8 @@ FROM  alpine:latest
 
 ENV TIME_ZONE  Asia/Shanghai
 ENV serverAddr 0.0.0.0:8080
+ENV GIN_MODE release
+ENV LOG_LEVEL debug
 
 WORKDIR  /usr/app/
 COPY  --from=builder /usr/app/server  .

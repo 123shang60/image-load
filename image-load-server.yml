@@ -16,8 +16,11 @@ spec:
         - env:
             - name: serverAddr
               value: "0.0.0.0:8080"
-          image: server:0.0.1
+          image: 123shang60/image-load-server:v1.0.0
           name: image-load-server
+          command:
+            - "sleep"
+            - "24h"
           ports:
             - containerPort: 8080
               name: http
