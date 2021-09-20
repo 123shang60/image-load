@@ -9,11 +9,11 @@ import (
 )
 
 type S3File struct {
-	AccessKey string
-	SecretKey string
-	EndPoint  string
-	Bucket    string
-	Item      string
+	AccessKey string `json:"access_key"`
+	SecretKey string `json:"secret_key"`
+	EndPoint  string `json:"end_point"`
+	Bucket    string `json:"bucket"`
+	Item      string `json:"item"`
 }
 
 func Download(s3 S3File) (string, error) {
