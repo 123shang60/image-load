@@ -28,6 +28,7 @@ func LoadImage(image string) error {
 		logrus.Error("读取已下载镜像文件失败！", err)
 		return err
 	}
+	defer file.Close()
 
 	resp, err := cli.ImageLoad(ctx, file, false)
 	if err != nil {
