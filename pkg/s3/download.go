@@ -1,11 +1,12 @@
 package s3
 
 import (
+	"io"
+	"os"
+
 	"github.com/go-basic/uuid"
 	"github.com/minio/minio-go"
 	"github.com/sirupsen/logrus"
-	"io"
-	"os"
 )
 
 type S3File struct {

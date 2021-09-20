@@ -2,12 +2,13 @@ package svc
 
 import (
 	"encoding/json"
+	"sync"
+
 	"github.com/123shang60/image-load/pkg/common"
 	"github.com/123shang60/image-load/pkg/register"
 	"github.com/123shang60/image-load/pkg/s3"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"sync"
 )
 
 func ServerLoad(c *gin.Context) {
