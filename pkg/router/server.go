@@ -9,7 +9,6 @@ import (
 func NewServerRouter() *gin.Engine {
 	r := gin.Default()
 
-	r.POST("/regist", register.RegistNewNode)
 	r.GET("/nodelist", register.NodeList)
 
 	r.POST("/load", svc.ServerLoad)
