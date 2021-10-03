@@ -18,7 +18,7 @@ spec:
               value: "0.0.0.0:8080"
             - name: rpcAddr
               value: "0.0.0.0:8082"
-          image: 123shang60/image-load-server:v0.0.0
+          image: 123shang60/image-load-server:v2.0.0
           name: image-load-server
           ports:
             - containerPort: 8080
