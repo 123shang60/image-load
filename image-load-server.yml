@@ -14,9 +14,11 @@ spec:
     spec:
       containers:
         - env:
-            - name: serverAddr
+            - name: httpAddr
               value: "0.0.0.0:8080"
-          image: 123shang60/image-load-server:v1.0.2
+            - name: rpcAddr
+              value: "0.0.0.0:8082"
+          image: 123shang60/image-load-server:v0.0.0
           name: image-load-server
           ports:
             - containerPort: 8080
@@ -48,6 +50,10 @@ spec:
       port: 8080
       protocol: TCP
       targetPort: 8080
+    - name: rpc
+      port: 8082
+      protocol: TCP
+      targetPort: 8082
   selector:
     app: image-load-server
   sessionAffinity: None

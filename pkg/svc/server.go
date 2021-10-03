@@ -2,10 +2,11 @@ package svc
 
 import (
 	"encoding/json"
+	"github.com/123shang60/image-load/pkg/register"
 	"sync"
 
 	"github.com/123shang60/image-load/pkg/common"
-	"github.com/123shang60/image-load/pkg/register"
+	data "github.com/123shang60/image-load/pkg/register/proto"
 	"github.com/123shang60/image-load/pkg/s3"
 	"github.com/gin-gonic/gin"
 	"github.com/patrickmn/go-cache"
@@ -43,7 +44,7 @@ func ServerLoad(c *gin.Context) {
 	for _, value := range agentList {
 		go func(value cache.Item) {
 			defer wg.Done()
-			node := value.Object.(register.NodeInfo)
+			node := value.Object.(*data.NodeInfo)
 			common.Logger().Debug("开始执行对应节点的导入工作:", node)
 			res, err := common.DoJsonHttp("http://"+node.Addr+":"+node.Port+"/load", byte, "POST")
 			if err != nil {

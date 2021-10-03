@@ -24,12 +24,12 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.name
             - name: registAddr
-              value: 'http://image-load-server-svc:8080'
+              value: 'image-load-server-svc:8082'
             - name: port
               value: '8080'
             - name: DOCKER_API_VERSION
               value: '1.40'
-          image: 123shang60/image-load-agent:v1.0.2
+          image: 123shang60/image-load-agent:v0.0.0
           name: image-load-agent
           resources:
             limits:

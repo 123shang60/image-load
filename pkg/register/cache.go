@@ -2,6 +2,7 @@ package register
 
 import (
 	"github.com/123shang60/image-load/pkg/common"
+	data "github.com/123shang60/image-load/pkg/register/proto"
 	"time"
 
 	"github.com/patrickmn/go-cache"
@@ -14,7 +15,7 @@ func init() {
 	c = cache.New(30*time.Second, 10*time.Second)
 }
 
-func AddCache(info NodeInfo) error {
+func AddCache(info *data.NodeInfo) error {
 	common.Logger().Debug("有一个 agent 前来注册。。。。", info)
 
 	c.SetDefault(info.Name, info)

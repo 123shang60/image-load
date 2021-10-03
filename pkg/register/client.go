@@ -1,14 +1,33 @@
 package register
 
 import (
+	"context"
 	"encoding/json"
+	data "github.com/123shang60/image-load/pkg/register/proto"
+	"google.golang.org/grpc"
 	"os"
 	"time"
 
 	"github.com/123shang60/image-load/pkg/common"
 )
 
+var client data.RegisterClient
+
+func InitClient() {
+	registAddr := os.Getenv("registAddr")
+	if registAddr == "" {
+		registAddr = "127.0.0.1:8082"
+	}
+
+	conn,err := grpc.Dial(registAddr, grpc.WithInsecure(),grpc.WithBlock())
+	if err != nil {
+		common.Logger().Panic("agent grpc 客户端创建失败！",err)
+	}
+	client = data.NewRegisterClient(conn)
+}
+
 func RegistAgent() {
+	InitClient()
 	registAgent()
 	tickTimer := time.NewTicker(10 * time.Second)
 	for {
@@ -20,10 +39,6 @@ func RegistAgent() {
 }
 
 func registAgent() {
-	registAddr := os.Getenv("registAddr")
-	if registAddr == "" {
-		registAddr = "http://127.0.0.1:8080"
-	}
 	addr := os.Getenv("addr")
 	if addr == "" {
 		addr = "127.0.0.1"
@@ -37,32 +52,23 @@ func registAgent() {
 		name = "agent-local"
 	}
 
-	nodeInof := NodeInfo{
+	nodeInfo := &data.NodeInfo{
 		Name: name,
 		Addr: addr,
 		Port: port,
 	}
 
-	byte, err := json.Marshal(nodeInof)
+	resp,err := client.RegistNode(context.Background(), nodeInfo)
 	if err != nil {
-		common.Logger().Error("构造环境信息失败！", err)
+		common.Logger().Error("grpc 调用失败！",err)
 		return
 	}
 
-	res, err := common.DoJsonHttp(registAddr+"/regist", byte, "POST")
-	if err != nil {
-		common.Logger().Error("发送注册信息失败！", err)
+	common.Logger().Debug("grpc 注册结果：", resp)
+	if resp.Code != 200 {
+		common.Logger().Error("grpc 注册失败！",resp.Err)
 		return
 	}
-
-	common.Logger().Info("接收到注册信息:", string(res))
-
-	var rul RegistResult
-	if err := json.Unmarshal(res, &rul); err != nil {
-		common.Logger().Error("解析注册结果失败！", err)
-	}
-	if rul.Code == 200 {
-		common.Logger().Debug("注册成功！")
-		return
-	}
+	bytes,_ := json.Marshal(resp)
+	common.Logger().Info("grpc 注册成功！",string(bytes))
 }
