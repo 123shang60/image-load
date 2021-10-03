@@ -24,8 +24,8 @@ build-agent:
 	@go build -o agent ./cmd/agent.go
 
 docker-server:
-	docker build -f Dockerfile-server -t $(IMAGE)/image-load-server:$(VERSION) .
+	docker build -f Dockerfile-server -t $(IMAGE)/image-load-server:v$(VERSION) .
 
 docker-agent:
-	docker build -f Dockerfile-agent -t $(IMAGE)/image-load-agent:$(VERSION) .
+	docker build -f Dockerfile-agent -t $(IMAGE)/image-load-agent:v$(VERSION) .
 
